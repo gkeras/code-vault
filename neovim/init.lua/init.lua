@@ -1,15 +1,15 @@
 -- ============================================================
--- OPCIONES BÁSICAS
+-- BASIC DEFAULTS
 -- ============================================================
 vim.g.mapleader = " "        -- Setear ANTES de cargar plugins
 local vim = vim
 
 vim.opt.relativenumber = true
 vim.opt.number = true
-vim.opt.background = "light"
+vim.opt.background = "dark"
 
 -- ============================================================
--- PLUGINS (gestor nativo de Neovim, sin lazy.nvim ni packer)
+-- PLUGINS 
 -- ============================================================
 vim.pack.add({
   { src = "https://github.com/catppuccin/nvim",                  name = "catppuccin" },
@@ -17,6 +17,8 @@ vim.pack.add({
   { src = "https://github.com/neovim/nvim-lspconfig" },
   { src = "https://github.com/mason-org/mason.nvim" },
   { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
+  { src = "https://github.com/nvim-tree/nvim-web-devicons" },
+  { src = "https://github.com/nvim-lualine/lualine.nvim" },
 })
 
 -- ============================================================
@@ -115,3 +117,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, 'LSP: Toggle diagnostics')
   end,
 })
+
+-- Starts lualine
+require('lualine').setup()
