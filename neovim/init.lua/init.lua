@@ -1,10 +1,17 @@
 -- ============================================================
 -- BASIC DEFAULTS
 -- ============================================================
+local vim = vim
 vim.g.mapleader = " "
 
 vim.opt.relativenumber = true
 vim.opt.number = true
+
+vim.opt.tabstop = 4       -- Render tabs as 4 spaces
+vim.opt.softabstop = 4    -- Insert 4 spaces when pressing tab 
+vim.opt.shiftwidth = 4    -- Indent by 4 spaces for auto-indent 
+vim.opt.expandtab = true  -- Convert all tabs into spaces 
+
 vim.opt.background = "dark"
 
 -- ============================================================
@@ -24,7 +31,6 @@ vim.opt.rtp:prepend(lazypath)
 -- DECLARACIÓN DE PLUGINS (Carga asíncrona automatizada)
 -- ============================================================
 require("lazy").setup({
-  
   -- Tema: Se carga de inmediato para evitar parpadeos (Priority 1000)
   {
     "catppuccin/nvim",
