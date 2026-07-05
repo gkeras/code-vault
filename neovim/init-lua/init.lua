@@ -8,7 +8,7 @@ vim.opt.relativenumber = true
 vim.opt.number = true
 
 vim.opt.tabstop = 4       -- Render tabs as 4 spaces
-vim.opt.softabstop = 4    -- Insert 4 spaces when pressing tab 
+vim.opt.softtabstop = 4    -- Insert 4 spaces when pressing tab 
 vim.opt.shiftwidth = 4    -- Indent by 4 spaces for auto-indent 
 vim.opt.expandtab = true  -- Convert all tabs into spaces 
 
