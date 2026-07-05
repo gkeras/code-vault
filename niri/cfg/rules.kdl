@@ -17,6 +17,25 @@
     }
 
     layer-rule {
-        match namespace="^noctalia-wallpaper*"
+        match namespace="^noctalia-backdrop"
         place-within-backdrop true
+    }
+
+    layer-rule {
+        match namespace="^noctalia-wallpaper"
+        place-within-backdrop true
+    }
+
+    // Apply optimized background blur to structural UI elements
+    layer-rule {
+        match namespace="^noctalia-(bar|panel|dock|attached-panel)$"
+        background-effect {
+            // Leaving xray out defaults to true, preventing desktop lag
+        }
+    }
+
+    // Keep transient overlay popups clean and stable without blur
+    layer-rule {
+        match namespace="^noctalia-(notification|osd)$"
+        // Overrides any global matching to protect text readability and rendering pipeline
     }
