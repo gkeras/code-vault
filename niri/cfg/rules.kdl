@@ -1,7 +1,22 @@
     window-rule {
-        geometry-corner-radius 20 // Set every window radius to 20
+        geometry-corner-radius 10 // Set every window radius to 20
         clip-to-geometry true
     }
+    // Enable blur behind Alacritty
+window-rule {
+    match app-id="^Alacritty$"
+    background-effect {
+        blur true
+    }
+}
+
+// (Optional) Configure the blur strength and parameters
+blur {
+    passes 3
+    offset 3.0
+    noise 0.02
+    saturation 1.2
+}
 
      // if you use steam you will probably like these
     window-rule {
