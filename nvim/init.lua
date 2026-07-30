@@ -52,17 +52,38 @@ require("lazy").setup({
     end,
   },
 
-  -- Treesitter: Automatizado y anclado a versión estable para evitar errores
+ -- Treesitter: rama "main" (reescritura completa, requerida por Neovim 0.12+).
+  -- La rama "master" (version = "^0.9.x") está congelada y rompe con el runtime
+  -- de treesitter de Neovim 0.12 (causaba "attempt to call method 'range' (a nil value)").
   {
     "nvim-treesitter/nvim-treesitter",
-    version = "^0.9.3",
+    branch = "main",
+    lazy = false, -- el plugin no soporta lazy-loading en la rama main
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" }, -- Se carga solo al abrir un archivo
     config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "lua", "vim", "vimdoc", "query", "python", "javascript", "typescript", "rust", "c" },
-        highlight = { enable = true },
-        indent = { enable = true },
+      local ts_langs = { "lua", "vim", "vimdoc", "query", "python", "javascript", "typescript", "rust", "c" }
+ 
+      require("nvim-treesitter").setup({})
+      -- Instala (o actualiza) los parsers de forma asíncrona
+      require("nvim-treesitter").install(ts_langs)
+ 
+      -- El highlighting ya no se activa solo: hay que arrancarlo por filetype.
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = ts_langs,
+        callback = function()
+          -- Evita error si el parser aún no terminó de instalarse
+          pcall(vim.treesitter.start)
+        end,
+        desc = "Treesitter: iniciar highlighting para lenguajes soportados",
+      })
+ 
+      -- Indentación basada en treesitter (experimental en la rama main)
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = ts_langs,
+        callback = function()
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+        desc = "Treesitter: indentación experimental",
       })
     end,
   },
