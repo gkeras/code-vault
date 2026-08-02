@@ -1,7 +1,6 @@
 -- ============================================================
 -- BASIC DEFAULTS
 -- ============================================================
-local vim = vim
 vim.g.mapleader = " "
 
 vim.opt.relativenumber = true
@@ -26,6 +25,14 @@ if not vim.uv.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
+
+-- ============================================================
+-- FILETYPE DETECTION
+-- ============================================================
+-- Add entries here for filetypes Neovim doesn't detect automatically.
+vim.filetype.add({
+  extension = { dbml = "dbml" },
+})
 
 -- ============================================================
 -- DECLARACIÓN DE PLUGINS (Carga asíncrona automatizada)
@@ -61,9 +68,9 @@ require("lazy").setup({
     lazy = false, -- el plugin no soporta lazy-loading en la rama main
     build = ":TSUpdate",
     config = function()
+      -- Add parser names here when starting with a new language.
+      -- Find names via :TSInstall <Tab>
       local ts_langs = { "lua", "vim", "vimdoc", "query", "python", "javascript", "typescript", "rust", "c" }
- 
-      require("nvim-treesitter").setup({})
       -- Instala (o actualiza) los parsers de forma asíncrona
       require("nvim-treesitter").install(ts_langs)
  
@@ -93,8 +100,9 @@ require("lazy").setup({
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" }, -- Carga diferida hasta que abres código
     dependencies = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
+      -- NOTE: mason repos moved from williamboman/ to mason-org/ in 2025
+      "mason-org/mason.nvim",
+      "mason-org/mason-lspconfig.nvim",
     },
     config = function()
       require('mason').setup()
@@ -105,6 +113,8 @@ require("lazy").setup({
       })
     end,
   },
+
+    { "jidn/vim-dbml" },  -- legacy regex-based syntax, works with any setup
 })
 
 -- ============================================================
@@ -129,11 +139,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('n', 'gO',        vim.lsp.buf.document_symbol, 'LSP: Document symbols')
     map('n', 'grn',       vim.lsp.buf.rename,          'LSP: Rename symbol')
     map({'n','v'}, 'gra', vim.lsp.buf.code_action,     'LSP: Code action')
+    map('n', 'grx',       vim.lsp.codelens.run,        'LSP: Run code lens')
     map('n', '<leader>f', vim.lsp.buf.format,          'LSP: Format buffer')
     map('n', 'K',         vim.lsp.buf.hover,           'LSP: Hover docs')
     map('i', '<C-s>',     vim.lsp.buf.signature_help,  'LSP: Signature help')
     map('n', ']d',         vim.diagnostic.goto_next,   'LSP: Next diagnostic')
     map('n', '[d',         vim.diagnostic.goto_prev,   'LSP: Prev diagnostic')
     map('n', '<leader>e',  vim.diagnostic.open_float,  'LSP: Show diagnostic float')
+    map('n', '<leader>q',  vim.diagnostic.setloclist,  'LSP: Diagnostics to loclist')
   end,
 })
